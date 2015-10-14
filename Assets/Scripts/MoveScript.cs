@@ -21,7 +21,7 @@ public class MoveScript : MonoBehaviour {
 	void Update () {
 		float mh = Input.GetAxis("Horizontal" + playernr);
 		float mv = Input.GetAxis("Vertical" + playernr);
-		float rx = Input.GetAxis("Mouse X");
+		float rx = Input.GetAxis("Mouse X" + playernr);
 
 		Vector3 directionv = transform.forward * mv;
 		Vector3 directionh = transform.right * mh;
