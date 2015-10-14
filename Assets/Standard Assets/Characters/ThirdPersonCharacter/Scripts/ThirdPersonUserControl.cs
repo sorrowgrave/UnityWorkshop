@@ -13,9 +13,20 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private Vector3 m_Move;
         private bool m_Jump;                      // the world-relative desired move direction, calculated from the camForward and user input.
 
-        
+        private CharacterController charController;
+        private static int playercount = 0;
+        private int playernr;
+        public float walkSpeed = 100f;
+        public float turnSpeed = 200f;
+        public GameObject projectile;
+
+
         private void Start()
         {
+            charController = this.GetComponent<CharacterController>();
+            playercount++;
+            playernr = playercount;
+            Debug.Log("I am player " + playernr);
             // get the transform of the main camera
             if (Camera.main != null)
             {
@@ -35,6 +46,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Vector3 bulletPos = transform.position + transform.forward * Time.deltaTime * walkSpeed;
+                Instantiate(projectile, bulletPos, transform.rotation);
+            }
             if (!m_Jump)
             {
                 m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
@@ -46,8 +62,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         private void FixedUpdate()
         {
             // read inputs
-            float h = CrossPlatformInputManager.GetAxis("Horizontal");
-            float v = CrossPlatformInputManager.GetAxis("Vertical");
+            float h = CrossPlatformInputManager.GetAxis("Horizontal" + playernr);
+            float v = CrossPlatformInputManager.GetAxis("Vertical" + playernr);
+            float rx = Input.GetAxis("Mouse X" + playernr);
+
             bool crouch = Input.GetKey(KeyCode.C);
 
             // calculate move direction to pass to character
@@ -62,9 +80,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 // we use world-relative directions in the case of no main camera
                 m_Move = v*Vector3.forward + h*Vector3.right;
             }
+
+
+
+
 #if !MOBILE_INPUT
-			// walk speed multiplier
-	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+            // walk speed multiplier
+            if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
+
 #endif
 
             // pass all parameters to the character control script
