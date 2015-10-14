@@ -4,6 +4,7 @@ using System.Collections;
 public class PowerUpScript : MonoBehaviour {
 	public float rotationSpeed = 20f;
 
+
 	// Use this for initialization
 	void Start () {
 	

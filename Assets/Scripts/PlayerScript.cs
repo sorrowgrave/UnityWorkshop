@@ -9,6 +9,7 @@ public class PlayerScript : MonoBehaviour {
 	public float turnSpeed = 200f;
 	public GameObject projectile;
 	public bool autoFire = false;
+	private float rotator = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -33,12 +34,22 @@ public class PlayerScript : MonoBehaviour {
 		Vector3 rotation = new Vector3 (0, rx, 0) * Time.deltaTime * turnSpeed;
 		charController.transform.Rotate (rotation);
 
-		if (Input.GetButtonDown("Fire1" + playerNr)|| autoFire) {
+		if (Input.GetButtonDown("Fire1" + playerNr)) {
 			Vector3 bulletPos = transform.position + transform.forward;
-			Debug.Log ("Forward " + transform.forward);
 			Instantiate(projectile, bulletPos, transform.rotation);
 		}
+		if (autoFire) {
+			Vector3 bulletPos = transform.position + transform.forward;
+ 			Instantiate(projectile, bulletPos, transform.rotation );
+		}
 
+	}
+
+	public void respawn(GameObject hitBy){
+		int y = 30 + (int) (Random.value * 100);
+		int x = 30 + (int) (Random.value * 100);
+		transform.position = new Vector3(x,1,y);
+		transform.LookAt (hitBy.transform.position);
 	}
 
 	public int PlayerNr {
